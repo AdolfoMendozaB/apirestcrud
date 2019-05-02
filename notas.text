@@ -1,0 +1,68 @@
+- php artisan serve
+
+- php make:model Movie -crm            controller, resource, migrations
+
+editar la migración    -  database/migrations
+
+ver el controlador del modelo    - http/controllers/MovieController.php
+
+- Vamos a routes/api.php  (ya hay una ruta para usuario)
+
+- En el .env modificamos la base de datos
+
+- corremos la migración -  php artisan migrate
+
+- Creamos las rutas en routes/api.php   -  Route::resource('movies', 'MovieController');
+
+- Vemos el controlador de movie en  Http/Controllers/MovieController.php
+
+	function index() = get
+		 create = muestra un formulario de registro (no se utiliza porque solo se va a usar como un apirest)
+		 store  = Crea un nuevo elemento (Post)
+		 edit   = El mismo que eliminamo para crear pero este es para eliminar
+		 update = Para actualizar elementos de movies
+		 destroy = Eliminar elementos de movie
+
+- Usar postman para probar rutas con mismo nombre pero diferente metodo
+
+    public function index()
+    {
+        $movies = Movie::get();
+        echo json_encode($movies);;
+    }
+
+    public function store(Request $request)
+    {
+        $movie = new Movie();
+        $movie->name = $request->input('name');
+        $movie->description = $request->input('description');
+        $movie->year = $request->input('year');
+        $movie->genre = $request->input('genre');
+        $movie->duration = $request->input('duration');
+        $movie->save();
+        echo json_encode($movie);
+    }
+
+
+    public function update(Request $request, $movie_id)
+    {
+        $movie = Movie::find($movie_id);
+        $movie->name = $request->input('name');
+        $movie->description = $request->input('description');
+        $movie->year = $request->input('year');
+        $movie->genre = $request->input('genre');
+        $movie->duration = $request->input('duration');
+        $movie->save();
+        echo json_encode($movie);
+    }
+
+    public function destroy($movie_id)
+    {
+        $movie = Movie::find($movie_id);
+        $movie->delete();
+        echo "Pelicula eliminada exitosamente";
+        echo json_encode($movie);
+        echo json_decode(true);
+    }
+
+
